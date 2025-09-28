@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-09-24T15:30:00Z",
+    "lastModified": "2025-09-24T15:30:00Z",
+    "projectName": "TrailTrack CRM",
+    "description": "Lightweight CRM for solo founders and small teams to track leads, communications, and pipeline management"
+  },
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Project Setup & Foundation",
+      "description": "Set up the basic project structure, development environment, and foundational configuration for TrailTrack CRM",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [],
+      "details": "Initialize React frontend with Vite, FastAPI backend, database setup with SQLModel/SQLAlchemy, and basic project structure following the PRD specifications.",
+      "testStrategy": "Verify that both frontend and backend start successfully, database connection works, and basic routing is functional.",
+      "subtasks": []
+    },
+    {
+      "id": 2,
+      "title": "Database Models & Schema",
+      "description": "Implement all core database models (User, Account, Contact, Lead, Activity, Task, Attachment) using SQLModel",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [1],
+      "details": "Create SQLModel classes for all entities as specified in the PRD schema. Set up proper relationships, constraints, and indexes. Implement Alembic for migrations.",
+      "testStrategy": "Create and run migrations successfully. Verify all model relationships work correctly with test data.",
+      "subtasks": []
+    },
+    {
+      "id": 3,
+      "title": "Authentication & Authorization System",
+      "description": "Implement JWT-based authentication with user roles and permissions",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [2],
+      "details": "Set up JWT access/refresh tokens, password hashing with argon2/bcrypt, user registration/login endpoints, role-based permissions (admin, user, viewer), and auth middleware.",
+      "testStrategy": "Test user registration, login, token refresh, and verify role-based access controls work correctly.",
+      "subtasks": []
+    },
+    {
+      "id": 4,
+      "title": "Core API Endpoints",
+      "description": "Implement all CRUD endpoints for accounts, contacts, leads, activities, and tasks",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [3],
+      "details": "Create FastAPI endpoints following the PRD specification: accounts, contacts, leads, activities, tasks with proper filtering, pagination, and validation using Pydantic schemas.",
+      "testStrategy": "Test all CRUD operations, validate request/response schemas, verify filtering and pagination work correctly.",
+      "subtasks": []
+    },
+    {
+      "id": 5,
+      "title": "Frontend Foundation & Routing",
+      "description": "Set up React frontend with routing, state management, and UI framework",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [1],
+      "details": "Initialize Vite React app with TypeScript, set up React Router v6, implement Context API + useReducer for state, configure Tailwind CSS + UI library (shadcn/ui or Headless UI).",
+      "testStrategy": "Verify all routes load correctly, state management works, and UI components render properly.",
+      "subtasks": []
+    },
+    {
+      "id": 6,
+      "title": "Authentication Frontend",
+      "description": "Implement login page, authentication flow, and protected routes in React",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [3, 5],
+      "details": "Create login form with React Hook Form + Zod validation, implement auth context, set up axios interceptors for token handling, and protect routes based on authentication state.",
+      "testStrategy": "Test login flow, token refresh, route protection, and ensure unauthenticated users are redirected appropriately.",
+      "subtasks": []
+    },
+    {
+      "id": 7,
+      "title": "Kanban Pipeline View",
+      "description": "Implement the core pipeline kanban board with drag-and-drop functionality",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [4, 6],
+      "details": "Create kanban board showing leads organized by stage (New → Qualified → Proposal → Negotiation → Closed). Implement drag-and-drop to move leads between stages, with cards showing title, account, value, and next task due.",
+      "testStrategy": "Verify drag-drop works correctly, stage changes persist to database, and card information displays accurately.",
+      "subtasks": []
+    },
+    {
+      "id": 8,
+      "title": "Lead Management Pages",
+      "description": "Create lead list view and detailed lead management pages",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [4, 6],
+      "details": "Implement lead list with filtering/sorting, lead detail page with tabs for Activity, Details, Contacts, Files, Tasks, and Timeline. Include inline editing and quick actions.",
+      "testStrategy": "Test lead CRUD operations, verify all tabs load correctly, and ensure data updates persist properly.",
+      "subtasks": []
+    },
+    {
+      "id": 9,
+      "title": "Account & Contact Management",
+      "description": "Implement account and contact list views with CRUD operations",
+      "status": "pending",
+      "priority": "medium",
+      "dependencies": [4, 6],
+      "details": "Create sortable/filterable account and contact lists, detail modals/pages, and quick-add functionality. Implement proper account-contact relationships.",
+      "testStrategy": "Test account and contact CRUD operations, verify relationship linking works, and ensure search/filter functionality is responsive.",
+      "subtasks": []
+    },
+    {
+      "id": 10,
+      "title": "Activity & Communication Logging",
+      "description": "Implement activity logging system for calls, emails, meetings, notes, and SMS",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [4, 6],
+      "details": "Create activity forms for different communication types, timeline view showing chronological activities, quick-add functionality from lead detail pages, and proper linking to leads/accounts/contacts.",
+      "testStrategy": "Test all activity types can be created and edited, timeline displays correctly, and activities link properly to related entities.",
+      "subtasks": []
+    },
+    {
+      "id": 11,
+      "title": "File Upload & Attachment System",
+      "description": "Implement file upload functionality with local storage and basic virus checking",
+      "status": "pending",
+      "priority": "medium",
+      "dependencies": [4, 6],
+      "details": "Create drag-drop file upload component, implement backend file storage with checksums, basic file type validation, and attachment management linked to leads/accounts/contacts/activities.",
+      "testStrategy": "Test file uploads work correctly, files are stored securely, and attachments display properly in relevant contexts.",
+      "subtasks": []
+    },
+    {
+      "id": 12,
+      "title": "Task Management & Reminders",
+      "description": "Implement task creation, management, and basic reminder system",
+      "status": "pending",
+      "priority": "medium",
+      "dependencies": [4, 6],
+      "details": "Create task CRUD operations, due date management, priority levels, task linking to other entities, and basic in-app reminder notifications.",
+      "testStrategy": "Test task creation and editing, verify due date tracking works, and ensure reminders display appropriately.",
+      "subtasks": []
+    },
+    {
+      "id": 13,
+      "title": "Today View Dashboard",
+      "description": "Create the main dashboard showing today's tasks, overdue items, and next best actions",
+      "status": "pending",
+      "priority": "medium",
+      "dependencies": [10, 12],
+      "details": "Design and implement the default landing page after login, showing user's open tasks, overdue items, priority actions, and quick access to recent activities.",
+      "testStrategy": "Verify dashboard loads quickly, displays relevant information, and provides effective navigation to detailed views.",
+      "subtasks": []
+    },
+    {
+      "id": 14,
+      "title": "Basic Reports & Analytics",
+      "description": "Implement pipeline summary, win/loss reporting, and source analysis",
+      "status": "pending",
+      "priority": "low",
+      "dependencies": [7, 8],
+      "details": "Create basic reporting views showing pipeline summary by stage, won vs lost deals by time period, top lead sources, and basic performance metrics.",
+      "testStrategy": "Test reports generate correctly with accurate data, charts display properly, and filters work as expected.",
+      "subtasks": []
+    },
+    {
+      "id": 15,
+      "title": "UI Polish & Responsive Design",
+      "description": "Ensure mobile-friendly responsive design and polish the user interface",
+      "status": "pending",
+      "priority": "medium",
+      "dependencies": [7, 8, 9, 10, 13],
+      "details": "Implement responsive design for mobile/tablet, improve loading states, error handling, form validation feedback, and overall user experience polish.",
+      "testStrategy": "Test on various screen sizes, verify touch interactions work on mobile, and ensure consistent design language throughout.",
+      "subtasks": []
+    },
+    {
+      "id": 16,
+      "title": "Deployment Setup",
+      "description": "Set up Docker containerization and deployment configuration",
+      "status": "pending",
+      "priority": "medium",
+      "dependencies": [15],
+      "details": "Create Docker compose setup with Nginx for frontend, Uvicorn for backend, mounted volumes for SQLite and file storage. Prepare for VPS deployment.",
+      "testStrategy": "Test Docker build and deployment locally, verify all services start correctly, and ensure data persistence works.",
+      "subtasks": []
+    }
+  ]
+}
