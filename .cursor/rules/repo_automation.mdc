@@ -1,0 +1,208 @@
+---
+description: Automated workflow for updating code, documentation, and repository management
+globs: **/*
+alwaysApply: true
+---
+
+# Repository Automation & Management Rules
+
+**Complete workflow for maintaining up-to-date repositories with automated code updates, documentation, and Git operations.**
+
+## **Pre-Commit Workflow**
+
+- **Dependency Updates**
+  - Run `npm audit fix` for all package.json files
+  - Update outdated packages with `npm update`
+  - Check for security vulnerabilities before commits
+  - Verify all dependencies are properly locked
+
+- **Code Quality Checks**
+  - Run linting on all modified files
+  - Fix auto-fixable issues automatically
+  - Run type checking for TypeScript projects
+  - Ensure all tests pass before committing
+
+## **Documentation Automation**
+
+- **Auto-Generated Documentation**
+  - Update README.md with current project status
+  - Sync package.json descriptions with README
+  - Generate API documentation from code comments
+  - Update changelog with recent changes
+
+- **Configuration Documentation**
+  - Document environment variables in .env.example
+  - Keep setup instructions current in README
+  - Update dependency requirements
+  - Document new features and breaking changes
+
+## **Git Operations Automation**
+
+### **Repository Status Check**
+```bash
+# Check all repositories for uncommitted changes
+for repo in "IEP Management System" "Veterans Placement Tool" "TrailTrack-CRM"; do
+  cd "/Users/claudiapitts/projects/$repo"
+  echo "=== $repo Status ==="
+  git status --porcelain
+  echo ""
+done
+```
+
+### **Batch Commit & Push**
+```bash
+# Function to update and commit all repositories
+update_all_repos() {
+  local commit_message="$1"
+  
+  for repo in "IEP Management System" "Veterans Placement Tool" "TrailTrack-CRM"; do
+    cd "/Users/claudiapitts/projects/$repo"
+    echo "=== Updating $repo ==="
+    
+    # Update dependencies if package.json exists
+    if [ -f "package.json" ] || [ -f "frontend/package.json" ] || [ -f "backend/package.json" ]; then
+      echo "Updating dependencies..."
+      npm audit fix --silent || true
+      [ -f "frontend/package.json" ] && cd frontend && npm audit fix --silent && cd ..
+      [ -f "backend/package.json" ] && cd backend && npm audit fix --silent && cd ..
+    fi
+    
+    # Update Python dependencies if requirements.txt exists
+    if [ -f "requirements.txt" ] || [ -f "backend/requirements.txt" ]; then
+      echo "Checking Python dependencies..."
+      # Add pip check or safety check here
+    fi
+    
+    # Git operations
+    git add .
+    if ! git diff --cached --quiet; then
+      git commit -m "$commit_message"
+      
+      # Push if remote exists
+      if git remote get-url origin >/dev/null 2>&1; then
+        git push
+        echo "✅ $repo: Committed and pushed"
+      else
+        echo "⚠️  $repo: Committed locally (no remote)"
+      fi
+    else
+      echo "ℹ️  $repo: No changes to commit"
+    fi
+    echo ""
+  done
+}
+```
+
+## **Security & Maintenance**
+
+- **Security Audits**
+  - Run `npm audit` on all JavaScript projects
+  - Check for known vulnerabilities in Python packages
+  - Scan for hardcoded secrets or API keys
+  - Verify .env files are properly gitignored
+
+- **File Cleanup**
+  - Remove temporary files and build artifacts
+  - Clean up old log files
+  - Verify .gitignore is comprehensive
+  - Remove unused dependencies
+
+## **Deployment Preparation**
+
+- **Environment Verification**
+  - Ensure all environment variables are documented
+  - Verify configuration files are up to date
+  - Check that all secrets are properly externalized
+  - Test startup scripts and deployment processes
+
+- **Documentation Updates**
+  - Update version numbers consistently
+  - Generate release notes from commit history
+  - Update API documentation if changed
+  - Refresh setup and deployment instructions
+
+## **Usage Examples**
+
+### **Quick Daily Update**
+```bash
+# Update all repos with standard maintenance
+update_all_repos "chore: Daily maintenance - dependency updates and documentation sync"
+```
+
+### **Feature Release**
+```bash
+# Update repos after implementing new features
+update_all_repos "feat: Implement new user authentication system
+
+- Enhanced security with JWT tokens
+- Updated user management workflows  
+- Improved error handling and logging
+- Updated documentation and setup guides"
+```
+
+### **Security Patch**
+```bash
+# Apply security updates across all projects
+update_all_repos "security: Update dependencies and fix vulnerabilities
+
+- Updated all npm packages to latest secure versions
+- Fixed identified security issues
+- Enhanced input validation
+- Updated security documentation"
+```
+
+## **Automated Checks Checklist**
+
+- [ ] **Dependencies**: All packages updated and secure
+- [ ] **Tests**: All tests passing
+- [ ] **Linting**: Code follows style guidelines  
+- [ ] **Documentation**: README and docs are current
+- [ ] **Environment**: .env.example matches requirements
+- [ ] **Security**: No secrets in code, dependencies secure
+- [ ] **Git**: All changes committed with clear messages
+- [ ] **Remote**: Changes pushed to GitHub
+- [ ] **Status**: Repository status clean
+
+## **Integration with Development Workflow**
+
+**Before Starting Work:**
+1. Pull latest changes from all remotes
+2. Update dependencies across all projects
+3. Run security audits
+4. Verify all repositories are in clean state
+
+**During Development:**
+1. Commit frequently with descriptive messages
+2. Update documentation as features are added
+3. Keep dependencies updated incrementally
+4. Run tests and linting before each commit
+
+**After Completing Work:**
+1. Run comprehensive tests across all projects
+2. Update all documentation
+3. Commit all changes with detailed messages
+4. Push to remote repositories
+5. Create release notes if applicable
+
+## **Repository-Specific Configurations**
+
+### **IEP Management System**
+- **Backend**: Node.js/Express with SQLite/MongoDB
+- **Frontend**: React with TypeScript
+- **Key Files**: package.json (frontend/backend), schema files
+- **Special Needs**: Database migration scripts, user data handling
+
+### **Veterans Placement Tool (VAP)**  
+- **Stack**: Node.js application
+- **GitHub**: https://github.com/JarvisforJira/VAP
+- **Key Files**: Configuration files, placement algorithms
+- **Special Needs**: Veteran data privacy, compliance requirements
+
+### **TrailTrack CRM**
+- **Backend**: FastAPI with PostgreSQL
+- **Frontend**: React with Vite
+- **GitHub**: https://github.com/JarvisforJira/TrailTrack
+- **Key Files**: requirements.txt, package.json, docker-compose.yml
+- **Special Needs**: Docker container updates, API documentation
+
+**Remember**: Always test locally before pushing to production repositories, and maintain consistent commit message formats across all projects for better tracking and automation.
