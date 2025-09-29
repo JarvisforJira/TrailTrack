@@ -5,6 +5,9 @@
 
 echo "🚀 Starting TrailTrack CRM with Professional ngrok Domain..."
 
+# Load permanent port configuration
+source "/Users/claudiapitts/projects/demo-ports-config.sh"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -12,8 +15,8 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Professional ngrok domain (reserved at dashboard.ngrok.com)
-NGROK_DOMAIN="trail.ngrok.app"
+# Use permanent domain from config
+NGROK_DOMAIN=$TRAIL_NGROK_DOMAIN
 
 # Function to check if a command exists
 command_exists() {
@@ -41,9 +44,9 @@ fi
 # Function to cleanup processes on exit
 cleanup() {
     echo -e "\n${YELLOW}🛑 Shutting down TrailTrack CRM...${NC}"
-    pkill -f "python3 main.py" || true
-    pkill -f "npm run dev" || true
-    pkill -f "ngrok http" || true
+    kill $BACKEND_PID 2>/dev/null || true
+    kill $FRONTEND_PID 2>/dev/null || true
+    kill $NGROK_PID 2>/dev/null || true
     exit 0
 }
 
@@ -97,9 +100,9 @@ FRONTEND_PID=$!
 echo -e "${YELLOW}⏳ Waiting for frontend to start...${NC}"
 sleep 8
 
-# Check if frontend is running
-if curl -s http://localhost:3001 > /dev/null; then
-    echo -e "${GREEN}✅ Frontend started successfully on port 3001${NC}"
+# Check if frontend is running on permanent port
+if curl -s http://localhost:$TRAIL_FRONTEND_PORT > /dev/null; then
+    echo -e "${GREEN}✅ Frontend started successfully on port $TRAIL_FRONTEND_PORT${NC}"
 else
     echo -e "${RED}❌ Failed to start frontend${NC}"
     kill $BACKEND_PID $FRONTEND_PID 2>/dev/null || true
@@ -110,8 +113,8 @@ fi
 echo -e "${BLUE}🌐 Starting Professional ngrok Tunnel...${NC}"
 echo -e "${YELLOW}📡 Using reserved domain: ${NGROK_DOMAIN}${NC}"
 
-# Start ngrok with reserved domain
-ngrok http --domain=$NGROK_DOMAIN 3001 --log=stdout > /tmp/ngrok-trailtrack.log &
+# Start ngrok with permanent domain and port
+ngrok http --domain=$NGROK_DOMAIN $TRAIL_FRONTEND_PORT --log=stdout > /tmp/ngrok-trailtrack.log &
 NGROK_PID=$!
 
 # Wait for ngrok to start
@@ -126,9 +129,9 @@ echo -e "${GREEN}🌟 Professional Demo URL: https://${NGROK_DOMAIN}${NC}"
 echo -e "${GREEN}📱 Share with Clients: https://${NGROK_DOMAIN}${NC}"
 echo ""
 echo -e "${BLUE}📊 Local Development URLs:${NC}"
-echo -e "${BLUE}   Frontend: http://localhost:3001${NC}"
-echo -e "${BLUE}   Backend:  http://localhost:8001${NC}"
-echo -e "${BLUE}   API Docs: http://localhost:8001/docs${NC}"
+echo -e "${BLUE}   Frontend: http://localhost:$TRAIL_FRONTEND_PORT${NC}"
+echo -e "${BLUE}   Backend:  http://localhost:$TRAIL_BACKEND_PORT${NC}"
+echo -e "${BLUE}   API Docs: http://localhost:$TRAIL_BACKEND_PORT/docs${NC}"
 echo ""
 echo -e "${BLUE}🌐 ngrok Dashboard: http://localhost:4040${NC}"
 echo ""
@@ -183,9 +186,9 @@ while true; do
         cd ..
     fi
     
-    if ! kill -0 $NGROK_PID 2>/dev/null; then
+        if ! kill -0 $NGROK_PID 2>/dev/null; then
         echo -e "${RED}❌ ngrok tunnel died - restarting...${NC}"
-        ngrok http --domain=$NGROK_DOMAIN 3001 --log=stdout > /tmp/ngrok-trailtrack.log &
+        ngrok http --domain=$NGROK_DOMAIN $TRAIL_FRONTEND_PORT --log=stdout > /tmp/ngrok-trailtrack.log &
         NGROK_PID=$!
     fi
 done
